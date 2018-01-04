@@ -9,9 +9,9 @@ GO
 DECLARE @g geometry;  
 SET @g = geometry::STGeomFromText('LINESTRING (100 100, 20 180, 180 180)', 0);  
 SELECT @g.ToString();  
-
 INSERT INTO VenueRow (GeomCol1)  
-VALUES (geometry::STGeomFromText('LINESTRING (100 100, 20 180, 180 180)', 0)); 
+VALUES (geometry::STGeomFromText('POLYGON ((0 0, 150 0, 150 150, 0 150, 0 0))', 0));  
+GO  
 
 DECLARE @geom1 geometry;  
 DECLARE @geom2 geometry;  
@@ -26,14 +26,9 @@ select @geom2.STBoundary().ToString()
 
 
 
-
-SELECT '[' + sc.name +'].' +o.name, SUM(reserved_page_count) * 8.0 / 1024,min(type_desc)
-FROM sys.dm_db_partition_stats, sys.objects o,sys.schemas sc 
-WHERE sys.dm_db_partition_stats.object_id = o.object_id
-and o.schema_id=sc.schema_id
- GROUP BY o.name,sc.name
-order by 2 desc;
-
-/* create geohraphy */ 
-
-
+DECLARE @g geometry;  
+DECLARE @geom2 geometry;  
+SET @g = geometry::STGeomFromText('LINESTRING(0 2, 2 0, 4 2)', 0);  
+SELECT @geom2 = GeomCol1 FROM VenueRow WHERE id = 2; 
+--SET @h = geometry::STGeomFromText('POINT(1 1)', 0);  
+SELECT @g.STIntersects(@geom2);  
